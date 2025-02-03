@@ -33,7 +33,7 @@ export default function RootLayout({
         </div>
         <div className="flex min-h-screen">
           <NavSidebar />
-          <main className="flex-1 p-4 lg:p-8 lg:ml-64 mt-8">
+          <main className="flex-1 p-4 lg:p-8 lg:ml-0 mt-8">
             <DynamicBreadcrumbs /> 
             {children}
           </main>
