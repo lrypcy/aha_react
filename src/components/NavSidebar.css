@@ -1,0 +1,25 @@
+/* 添加按钮点击状态 */
+.sidebar-close:active {
+    transform: scale(0.9);
+}
+
+/* 确保按钮可点击 */
+.sidebar-close {
+    pointer-events: auto !important;
+    z-index: 1002 !important;
+}
+
+/* 防止侧边栏内容遮挡按钮 */
+.nav-sidebar {
+    position: relative;
+    overflow: visible;
+}
+
+.group:hover .chevron-icon {
+    transform: rotate(90deg);
+}
+
+.child-link {
+    padding-left: 2rem;
+    font-size: 0.875rem;
+}
