@@ -1,5 +1,7 @@
+'use client'
 import JobSearch from '../../../components/JobSearch';
 import JobsTable from '../../../components/JobsTable';
+import { useState } from 'react';
 
 // 示例数据 - 需要替换为实际搜索结果数据
 const sampleJobs = Array.from({ length: 60 }, (_, i) => ({
@@ -11,13 +13,38 @@ const sampleJobs = Array.from({ length: 60 }, (_, i) => ({
 }));
 
 export default function JobsPage() {
+    const [jobs, setJobs] = useState<Job[]>(sampleJobs);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSearch = async (searchParams: SearchParams) => {
+        setIsLoading(true);
+        try {
+            // 这里替换为实际API调用
+            const response = await fetch('/api/internal/jobs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(searchParams)
+            });
+            const data = await response.json();
+            setJobs(data);
+        } catch (error) {
+            console.error('搜索失败:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold">Jobs</h1>
-            <JobSearch />
+            <JobSearch onSearch={handleSearch} />
 
             <div className="mt-4">
-                <JobsTable jobs={sampleJobs} />
+                {isLoading ? (
+                    <div>加载中...</div>
+                ) : (
+                    <JobsTable jobs={jobs} />
+                )}
             </div>
         </div>
     );

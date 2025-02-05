@@ -18,6 +18,20 @@ import {
 } from '@mui/material';
 import TagInput from '@/components/TagInput'
 
+interface Props {
+    onSearch: (params: SearchParams) => void;
+}
+
+interface SearchParams {
+    experience?: string;
+    education?: string;
+    salaryRange?: string;
+    endDate?: string;
+    labels?: string[];
+    sortField?: string;
+    sortOrder?: 'asc' | 'desc';
+}
+
 const JobSearch: FC<Props> = ({ onSearch }) => {
     const [searchTitle, setSearchTitle] = useState<string>('');
     const [searchCompany, setSearchCompany] = useState<string>('');
@@ -39,6 +53,14 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
     const [inputValue, setInputValue] = useState('');
     const [sortField, setSortField] = useState<string>('postDate');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [newDialogOpen, setNewDialogOpen] = useState(false);
+    const [newJobData, setNewJobData] = useState({
+        title: '',
+        company: '',
+        status: 'active',
+        salary: '',
+        description: ''
+    });
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTitle(e.target.value);
     const handleCompanyChange = (e: ChangeEvent<HTMLInputElement>) => setSearchCompany(e.target.value);
@@ -88,6 +110,19 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
             sortOrder
         });
         handleAdvancedSearchClose();
+    };
+
+    const handleCreateJob = () => {
+        // 这里调用API创建职位
+        console.log('Creating job:', newJobData);
+        setNewDialogOpen(false);
+        setNewJobData({
+            title: '',
+            company: '',
+            status: 'active',
+            salary: '',
+            description: ''
+        });
     };
 
     return (
@@ -260,6 +295,16 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
                                 高级搜索
                             </Button>
                         </Grid>
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="success"
+                                onClick={() => setNewDialogOpen(true)}
+                                sx={{ minWidth: 100 }}
+                            >
+                                新建
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
@@ -333,6 +378,81 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
                                 onClick={handleSearch}
                             >
                                 应用筛选
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Popover>
+
+            {/* 新建职位对话框 */}
+            <Popover
+                open={newDialogOpen}
+                onClose={() => setNewDialogOpen(false)}
+                anchorOrigin={{
+                    vertical: 'center',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'center',
+                    horizontal: 'center',
+                }}
+            >
+                <Box sx={{ p: 3, width: 400 }}>
+                    <h2 className="text-xl font-bold mb-4">新建职位</h2>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="职位名称"
+                                value={newJobData.title}
+                                onChange={(e) => setNewJobData({...newJobData, title: e.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="公司名称"
+                                value={newJobData.company}
+                                onChange={(e) => setNewJobData({...newJobData, company: e.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel>状态</InputLabel>
+                                <Select
+                                    value={newJobData.status}
+                                    onChange={(e) => setNewJobData({...newJobData, status: e.target.value})}
+                                >
+                                    <MenuItem value="active">进行中</MenuItem>
+                                    <MenuItem value="expired">已结束</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="薪资范围"
+                                value={newJobData.salary}
+                                onChange={(e) => setNewJobData({...newJobData, salary: e.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="职位描述"
+                                multiline
+                                rows={4}
+                                value={newJobData.description}
+                                onChange={(e) => setNewJobData({...newJobData, description: e.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button 
+                                fullWidth 
+                                variant="contained" 
+                                onClick={handleCreateJob}
+                            >
+                                创建职位
                             </Button>
                         </Grid>
                     </Grid>

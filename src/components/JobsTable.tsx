@@ -78,28 +78,36 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {jobs
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((job) => (
-                            <TableRow key={job.id}>
-                                <TableCell>{job.title}</TableCell>
-                                <TableCell>{job.company}</TableCell>
-                                <TableCell>{job.location}</TableCell>
-                                <TableCell>{job.salary}</TableCell>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
-                                <TableCell>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => alert(`进入职位 ${job.id} 详情`)}
-                                    >
-                                        详情
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                    {jobs.length === 0 ? (
+                        <TableRow>
+                            <TableCell colSpan={8} className="text-center py-8">
+                                暂无数据
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        jobs
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((job) => (
+                                <TableRow key={job.id}>
+                                    <TableCell>{job.title}</TableCell>
+                                    <TableCell>{job.company}</TableCell>
+                                    <TableCell>{job.location}</TableCell>
+                                    <TableCell>{job.salary}</TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => alert(`进入职位 ${job.id} 详情`)}
+                                        >
+                                            详情
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                    )}
                 </TableBody>
             </Table>
             <TablePagination
