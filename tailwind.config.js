@@ -10,6 +10,9 @@ module.exports = {
           100: '#e6f0ff',
           600: '#2563eb',
         }
+      },
+      backgroundImage: {
+        'sidebar-gradient': 'linear-gradient(195deg, #ffffff 0%, #f3f4f6 100%)',
       }
     },
   },

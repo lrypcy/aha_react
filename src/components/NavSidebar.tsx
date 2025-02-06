@@ -59,12 +59,22 @@ export default function NavSidebar() {
                 flexShrink: 0,
                 transition: 'width 0.3s',
                 '& .MuiDrawer-paper': {
+                    background: `
+                        linear-gradient(
+                            195deg,
+                            rgba(245, 247, 255, 0.98) 0%,
+                            rgba(240, 242, 254, 0.98) 50%,
+                            rgba(235, 238, 252, 0.98) 100%
+                        )`,
+                    backdropFilter: 'blur(16px)',
+                    boxShadow: '4px 0 20px -5px rgba(102, 126, 255, 0.15)',
                     width: isOpen ? 240 : 64,
                     boxSizing: 'border-box',
-                    transition: 'width 0.3s',
+                    transition: 'width 0.3s, background 0.3s',
                     overflowX: 'hidden',
                     marginTop: '64px',
-                    height: 'calc(100% - 64px)'
+                    height: 'calc(100% - 64px)',
+                    borderRight: 'none'
                 },
             }}
         >
@@ -82,11 +92,13 @@ export default function NavSidebar() {
                                 <div
                                     onClick={() => item.children && toggleItem(item.href)}
                                     className={`
-                        flex items-center justify-between px-3 py-2 rounded transition-colors duration-200 cursor-pointer
-                        ${pathname.startsWith(item.href)  // 修改匹配逻辑
-                                                ? 'bg-blue-100 text-blue-600'
-                                                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                                            }
+                        flex items-center justify-between px-3 py-2 rounded-lg 
+                        transition-all duration-300 ease-out
+                        ${pathname.startsWith(item.href)
+                            ? 'bg-white text-indigo-600 shadow-md hover:shadow-lg'
+                            : 'text-slate-600 hover:bg-white/60 hover:text-indigo-500'
+                        }
+                        hover:transform hover:scale-[1.02]
                     `}
                                 >
                                     <div className="flex items-center">
