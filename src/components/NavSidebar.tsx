@@ -17,8 +17,8 @@ import {
     ChartBarIcon,
     BriefcaseIcon,
     ListBulletIcon,
-    InformationCircleIcon,
-    PhoneIcon,
+    ChatBubbleLeftIcon,
+    DocumentIcon,
 } from '@heroicons/react/24/outline';
 
 export default function NavSidebar() {
@@ -42,13 +42,12 @@ export default function NavSidebar() {
             href: '/jobs',
             icon: BriefcaseIcon,
             children: [
-                { name: 'AJob', href: '/jobs/AJob' },
-                { name: 'BJob', href: '/jobs/BJob' }
+                { name: 'AJob', href: '/jobs/AJob', icon: DocumentIcon },
+                { name: 'BJob', href: '/jobs/BJob', icon: DocumentIcon }
             ]
         },
         { name: 'Tasks', href: '/tasks', icon: ListBulletIcon },
-        { name: '关于', href: '/about', icon: InformationCircleIcon },
-        { name: '联系我们', href: '/contact', icon: PhoneIcon },
+        { name: 'Chat', href: '/chat', icon: ChatBubbleLeftIcon },
     ];
 
     return (
@@ -104,7 +103,7 @@ export default function NavSidebar() {
                                     <div className="flex items-center">
                                         {item.children ? (
                                             <item.icon
-                                                className="w-5 h-5 flex-shrink-0"
+                                                className="w-5 h-5 flex-shrink-0 cursor-pointer"
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     toggleItem(item.href);
@@ -131,21 +130,26 @@ export default function NavSidebar() {
                                 </div>
 
                                 {item.children && expandedItems[item.href] && (
-                                    <div className="ml-4 mt-1 space-y-1">
+                                    <div className={`${isOpen ? 'ml-4' : 'ml-0'} mt-1 space-y-1`}>
                                         {item.children.map(child => (
                                             <Link
                                                 key={child.href}
                                                 href={child.href}
-                                                onClick={(e) => e.stopPropagation()}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (!isOpen) toggleSidebar();
+                                                }}
                                                 className={`
-                                    block px-3 py-2 rounded transition-colors duration-200
+                                    flex items-center px-3 py-2 rounded transition-colors duration-200
                                     ${pathname === child.href
                                                             ? 'bg-blue-50 text-blue-600'
                                                             : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                                         }
+                                    ${isOpen ? 'pl-3' : 'pl-1 justify-center'}
                                 `}
                                             >
-                                                {child.name}
+                                                <child.icon className="w-5 h-5 flex-shrink-0" />
+                                                {isOpen && <span className="ml-2">{child.name}</span>}
                                             </Link>
                                         ))}
                                     </div>
