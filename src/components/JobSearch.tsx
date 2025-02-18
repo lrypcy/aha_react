@@ -17,6 +17,7 @@ import {
     Switch
 } from '@mui/material';
 import TagInput from '@/components/TagInput'
+import Link from 'next/link'
 
 interface Props {
     onSearch: (params: SearchParams) => void;
@@ -59,7 +60,8 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
         company: '',
         status: 'active',
         salary: '',
-        description: ''
+        description: '',
+        Config: {}
     });
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTitle(e.target.value);
@@ -112,17 +114,42 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
         handleAdvancedSearchClose();
     };
 
-    const handleCreateJob = () => {
-        // 这里调用API创建职位
-        console.log('Creating job:', newJobData);
-        setNewDialogOpen(false);
-        setNewJobData({
-            title: '',
-            company: '',
-            status: 'active',
-            salary: '',
-            description: ''
-        });
+    const handleCreateJob = async () => {
+        try {
+            const response = await fetch('/api/internal/job', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newJobData)
+            });
+
+            if (!response.ok) {
+                console.log(response)
+                throw new Error('Failed to create job');
+            }
+
+            const createdJob = await response.json();
+            console.log('Job created successfully:', createdJob);
+
+            // Reset form and close dialog
+            setNewDialogOpen(false);
+            setNewJobData({
+                title: '',
+                company: '',
+                status: 'active',
+                salary: '',
+                description: '',
+                Config: {}
+            });
+
+            // Optionally trigger a search to refresh the job list
+            handleSearch();
+
+        } catch (error) {
+            console.error('Error creating job:', error);
+            // You might want to add error handling UI here
+        }
     };
 
     return (
@@ -296,14 +323,15 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button
-                                variant="contained"
-                                color="success"
-                                onClick={() => setNewDialogOpen(true)}
-                                sx={{ minWidth: 100 }}
-                            >
-                                新建
-                            </Button>
+                            <Link href="/jobs/New" passHref>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    sx={{ minWidth: 100 }}
+                                >
+                                    新建
+                                </Button>
+                            </Link>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -378,81 +406,6 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
                                 onClick={handleSearch}
                             >
                                 应用筛选
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Popover>
-
-            {/* 新建职位对话框 */}
-            <Popover
-                open={newDialogOpen}
-                onClose={() => setNewDialogOpen(false)}
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'center',
-                    horizontal: 'center',
-                }}
-            >
-                <Box sx={{ p: 3, width: 400 }}>
-                    <h2 className="text-xl font-bold mb-4">新建职位</h2>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="职位名称"
-                                value={newJobData.title}
-                                onChange={(e) => setNewJobData({...newJobData, title: e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="公司名称"
-                                value={newJobData.company}
-                                onChange={(e) => setNewJobData({...newJobData, company: e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel>状态</InputLabel>
-                                <Select
-                                    value={newJobData.status}
-                                    onChange={(e) => setNewJobData({...newJobData, status: e.target.value})}
-                                >
-                                    <MenuItem value="active">进行中</MenuItem>
-                                    <MenuItem value="expired">已结束</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="薪资范围"
-                                value={newJobData.salary}
-                                onChange={(e) => setNewJobData({...newJobData, salary: e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="职位描述"
-                                multiline
-                                rows={4}
-                                value={newJobData.description}
-                                onChange={(e) => setNewJobData({...newJobData, description: e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button 
-                                fullWidth 
-                                variant="contained" 
-                                onClick={handleCreateJob}
-                            >
-                                创建职位
                             </Button>
                         </Grid>
                     </Grid>
