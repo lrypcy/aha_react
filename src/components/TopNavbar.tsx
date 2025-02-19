@@ -1,9 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
 import Link from 'next/link';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import LoginButton from './LoginButton';
 
 export default function TopNavbar() {

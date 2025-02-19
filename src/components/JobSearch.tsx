@@ -51,26 +51,13 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
     });
     const [searchStartDate, setSearchStartDate] = useState<string>('');
     const [searchEndDate, setSearchEndDate] = useState<string>('');
-    const [inputValue, setInputValue] = useState('');
     const [sortField, setSortField] = useState<string>('postDate');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [newDialogOpen, setNewDialogOpen] = useState(false);
-    const [newJobData, setNewJobData] = useState({
-        title: '',
-        company: '',
-        status: 'active',
-        salary: '',
-        description: '',
-        Config: {}
-    });
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTitle(e.target.value);
     const handleCompanyChange = (e: ChangeEvent<HTMLInputElement>) => setSearchCompany(e.target.value);
     const handleStatusChange = (e: ChangeEvent<{ value: unknown }>) =>
         setSearchStatus(e.target.value as string);
-    const handleLabelsChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
-    };
 
     const handleFilterChange = (filterName: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setFilters(prev => ({
@@ -112,44 +99,6 @@ const JobSearch: FC<Props> = ({ onSearch }) => {
             sortOrder
         });
         handleAdvancedSearchClose();
-    };
-
-    const handleCreateJob = async () => {
-        try {
-            const response = await fetch('/api/internal/job', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newJobData)
-            });
-
-            if (!response.ok) {
-                console.log(response)
-                throw new Error('Failed to create job');
-            }
-
-            const createdJob = await response.json();
-            console.log('Job created successfully:', createdJob);
-
-            // Reset form and close dialog
-            setNewDialogOpen(false);
-            setNewJobData({
-                title: '',
-                company: '',
-                status: 'active',
-                salary: '',
-                description: '',
-                Config: {}
-            });
-
-            // Optionally trigger a search to refresh the job list
-            handleSearch();
-
-        } catch (error) {
-            console.error('Error creating job:', error);
-            // You might want to add error handling UI here
-        }
     };
 
     return (

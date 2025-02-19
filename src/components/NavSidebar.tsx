@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Bars3Icon, XMarkIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import {
     Drawer,
@@ -42,8 +42,7 @@ export default function NavSidebar() {
             href: '/jobs',
             icon: BriefcaseIcon,
             children: [
-                { name: 'AJob', href: '/jobs/AJob', icon: DocumentIcon },
-                { name: 'BJob', href: '/jobs/BJob', icon: DocumentIcon }
+                { name: 'AJob', href: '/jobs/AJob', icon: DocumentIcon }
             ]
         },
         { name: 'Tasks', href: '/tasks', icon: ListBulletIcon },
