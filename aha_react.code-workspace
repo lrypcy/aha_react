@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"name": "aha_react",
+			"path": "."
+		},
+		{
+			"name": "hello_fe25",
+			"path": "../hello_fe25"
+		},
+		{
+			"path": "../aha_webserver"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "aha_react/node_modules/typescript/lib"
+	}
+}
